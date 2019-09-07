@@ -1,0 +1,211 @@
+class Person:
+    def __init__(self, name, cnic, cell_number, address):
+        self.name = name
+        self.cnic = cnic
+        self.cell_number = cell_number
+        self.address = address
+
+    def get_name(self):
+        return self.name
+
+    def get_cnic(self):
+        return self.cnic
+
+    def get_cell_number(self):
+        return self.cell_number
+
+    def get_address(self):
+        return self.address
+
+
+class Parking_Plaza:
+    def __init__(self, number_of_floors):
+        self.floors = number_of_floors
+    emp_details = []
+    total_parking_slots = []
+    available_motorcycle_parking_slots = []
+    available_car_parking_slots = []
+    available_truck_parking_slots = []
+    counter_m = 0
+    counter_c = 0
+    counter_t = 0
+
+    for i in range(1, 21):
+        available_motorcycle_parking_slots.append("M" + str(i))
+
+    for i in range(1, 21):
+        available_car_parking_slots.append("C" + str(i))
+
+    for i in range(1, 21):
+        available_truck_parking_slots.append("T" + str(i))
+
+    total_parking_slots.append(available_motorcycle_parking_slots + available_car_parking_slots + available_truck_parking_slots)
+
+
+class Staff(Person):
+    def __init__(self, name, cnic, cell_number, address, emp_id, duty):
+        Person.__init__(self, name, cnic, cell_number, address)
+        self.emp_id = emp_id
+        self.duty = duty
+
+    def get_emp_details(self):
+        print("\nEmployee Details:\n")
+        print("Employee Name: ", self.name, "\nEmployee CNIC: ", self.cnic, "\nEmployee ID: ", self.emp_id, "\nDuty: ", self.duty)
+
+    def get_duty(self):
+        return self.duty
+
+    def add_to_palza(self, staff_obj):
+        Parking_Plaza.emp_details.append(staff_obj)
+
+
+class Customer(Person):
+    def __init__(self, name, cnic, cell_number, address, driving_license, vehicle_type, registration_number, slot_alloted=0):
+        Person.__init__(self, name, cnic, cell_number, address)
+        self.driving_license = driving_license
+        self.vehicle_type = vehicle_type
+        self.registration_number = registration_number
+        self.slot_alloted = slot_alloted
+
+    def get_customer_details(self):
+        print("\nCustomer Details:\n")
+        print("Name: ", self.name, "\nCNIC #: ", self.cnic, "\nAddress: ", self.address, "\nDriving Licence #: ", self.driving_license, "\nVehicle Type: ", self.vehicle_type, "\nRegistration Number: ", self.registration_number, "\nSlot Alloted: ", self.slot_alloted)
+
+    def get_vehicle_type(self):
+        return self.vehicle_type
+
+    def set_slot(self, set):
+        self.slot_alloted = set
+        return self.slot_alloted
+
+
+class Booking:
+    def __init__(self, Cust_obj):
+        self.Cust_obj = Cust_obj
+
+        self.total_bookings = 0
+        if self.Cust_obj.get_vehicle_type() == "Motorcycle":
+            if len(Parking_Plaza.available_motorcycle_parking_slots) > 1:
+                Alloting_slot = Parking_Plaza.available_motorcycle_parking_slots.pop(0)
+                Parking_Plaza.counter_m += 1
+                Cust_obj.set_slot(Alloting_slot)
+            else:
+                print("No space for Motorcycles available")
+
+        elif self.Cust_obj.get_vehicle_type() == "Car":
+            if len(Parking_Plaza.available_car_parking_slots) > 1:
+                Alloting_slot = Parking_Plaza.available_car_parking_slots.pop(0)
+                Parking_Plaza.counter_c += 1
+                Cust_obj.set_slot(Alloting_slot)
+            else:
+                print("No space for Cars available")
+
+        elif self.Cust_obj.get_vehicle_type() == "Truck":
+            if len(Parking_Plaza.available_truck_parking_slots) > 1:
+                Alloting_slot = Parking_Plaza.available_truck_parking_slots.pop(0)
+                Parking_Plaza.counter_t += 1
+                Cust_obj.set_slot(Alloting_slot)
+            else:
+                print("No space for Trucks Available")
+        else:
+            print("Enter correct vehicle type")
+
+        self.total_bookings += 1
+
+    def get_total_number_of_bookings(self):
+        return self.total_bookings
+
+
+class Manager(Person):
+    def __init__(self, name, cnic, cell_number, address, id):
+        Person.__init__(self, name, cnic, cell_number, address)
+        self.id = id
+
+    def cust_details(self, cust_obj):
+        print("\nThe customer details for ", Person.get_name(cust_obj), "are:")
+        Customer.get_customer_details(cust_obj)
+
+
+    def get_fiancial_revenue_m(self, ticket_price=10):
+        a = Parking_Plaza.counter_m * ticket_price
+        print("Financial revenue for Motorcycles is: ", a, "\n")
+
+    def get_financial_revenue_c(self, ticket_price=20):
+        a = Parking_Plaza.counter_c * ticket_price
+        print("Financial revenue for Cars is: ", a, "\n")
+
+    def get_financial_revenue_t(self, ticket_price=50):
+        a = Parking_Plaza.counter_t * ticket_price
+        print("Financial Revenue for Trucks is: ", a, "\n")
+
+    def get_parking_spots(self):
+        return Parking_Plaza.total_parking_slots
+
+    def available_m_slots(self):
+        return Parking_Plaza.available_motorcycle_parking_slots
+
+    def available_c_slots(self):
+        return Parking_Plaza.available_car_parking_slots
+
+    def available_t_slots(self):
+        return Parking_Plaza.available_truck_parking_slots
+
+
+def main():
+
+    staff_1 = Staff("John", "16987422", "090078601", "Karachi", "91", "Motorcycles")
+    staff_2 = Staff("Peter", "16987422", "090078601", "Gujrat", "92", "Cars")
+    staff_3 = Staff("Johnson", "16987422", "090078601", "Multan", "93", "Trucks")
+    Parking_Plaza.emp_details.append(staff_1.get_emp_details())
+    Parking_Plaza.emp_details.append(staff_2.get_emp_details())
+    Parking_Plaza.emp_details.append(staff_3.get_emp_details())
+
+    one_person = Person("Ahmad", "52487999888", "090078601", "Lahore")
+    cust_1 = Customer(one_person.name, one_person.cnic, one_person.cell_number, one_person.address, "5214", "Car", "AZZ-540")
+    Booking(cust_1)
+    cust_1.get_customer_details()
+
+    second_person = Person("Zubair", "9875446522", "090021923", "Afghanistan")
+    cust_2 = Customer(second_person.name, second_person.cnic, second_person.cell_number, second_person.address, "5214", "Truck", "BWE-92585")
+    Booking(cust_2)
+    cust_2.get_customer_details()
+
+    third_person = Person("Cicel", "95491621652", "0900875513", "Lahore")
+    cust_3 = Customer(third_person.name, third_person.cnic, third_person.cell_number, third_person.address, "5214", "Motorcycle", "LEL-17-850")
+    Booking(cust_3)
+    cust_3.get_customer_details()
+
+    manager = Manager("Ali", "219354545", "090056455", "Lahore", "80")
+    manager.cust_details(cust_2)
+
+main()
+
+
+emp_details_file = open("Employee_Details", "w+")
+available_motorcycle_parking_slots_file = open("Available Motorcycles Slots", "w+")
+available_car_parking_slots_file = open("Available Car Slots", "w+")
+available_trucks_parking_slots_file = open("Available Truck Slots", "w+")
+customer_details = open("Customer Details", "w+")
+
+for i in Parking_Plaza.available_motorcycle_parking_slots:
+    available_motorcycle_parking_slots_file.write(i)
+    available_motorcycle_parking_slots_file.write(", ")
+
+for i in Parking_Plaza.emp_details:
+    emp_details_file.write(str(i))
+    emp_details_file.write(", ")
+
+for i in Parking_Plaza.available_car_parking_slots:
+    available_car_parking_slots_file.write(str(i))
+    available_car_parking_slots_file.write(", ")
+
+for i in Parking_Plaza.available_truck_parking_slots:
+    available_trucks_parking_slots_file.write(str(i))
+    available_trucks_parking_slots_file.write(", ")
+
+
+emp_details_file.close()
+available_motorcycle_parking_slots_file.close()
+available_car_parking_slots_file.close()
+available_trucks_parking_slots_file.close()
+customer_details.close()
