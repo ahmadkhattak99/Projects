@@ -1,0 +1,170 @@
+class Log_in:
+    log_in_details = {"21-10301": "1234", "21-10318": "5678", "21-10333": "lad123", "00-0021": "87pop", "01-5241": "faqr871"}
+
+    def __init__(self, id, pwd):
+        self.id = id
+        self.pwd = pwd
+
+
+class Student:
+    def __init__(self, name, age, id, address, major, GPA):
+        self.name = name
+        self.age = age
+        self.id = id
+        self.address = address
+        self.major = major
+        self.gpa = GPA
+        self.courses = []
+
+    def get_Details(self):
+        print("\nName: ", self.name,
+              "\nAge: ", self.age,
+              "\nID: ", self.id,
+              "\nAddress: ", self.address,
+              "\nMajor: ", self.major,
+              "\nGPA:", self.gpa,
+              "\nCourses: ", self.courses
+              )
+
+
+class Faculty:
+    def __init__(self, name, id, address, department):
+        self.name = name
+        self.id = id
+        self.address = address
+        self.department = department
+        self.students_registered = {}
+
+    def get_Details(self):
+        print("\nName: ", self.name,
+              "\nID: ", self.id,
+              "\nAddress: ", self.address,
+              "\nDepartment: ", self.department
+              )
+
+    def get_students_registered(self):
+        print(self.students_registered)
+
+
+class Administration:
+    def __init__(self, name, id, address):
+        self.name = name
+        self.id = id
+        self.address = address
+        self.courses_created = []
+
+    def get_Details(self):
+        print("\nName: ", self.name,
+              "\nAddress: ", self.address,
+              "\nID: ", self.id
+
+              )
+
+    def get_courses_created(self):
+        print(self.courses_created)
+
+
+class Course:
+    def __init__(self, name, seats_alloted, f_assigned):
+        self.name = name
+        self.seats_alloted = seats_alloted
+        self.faculty_assigned = f_assigned
+        self.students_registered = 0
+
+    def get_course_info(self):
+        print("\nCourse Name: ", self.name,
+              "\nSeats Alloted: ", self.seats_alloted
+              )
+
+    def get_faculty_assigned_to(self):
+        print("\nFaculty Assigned: ", self.faculty_assigned)
+
+    def get_students_registered(self):
+        print("\nStudents Registered: ", self.students_registered)
+
+
+student_1 = Student("Ahmad", 19, "21-10301", "Lahore", "CS", "3.5")
+student_2 = Student("Shoaib", 20, "21-10318", "Lahore", "CS", "3.2")
+student_3 = Student("Cicel", 17, "21-10333", "Lahore", "CS", "2.9")
+admin_1 = Administration("Arsala", "00-0021", "Lahore")
+faculty_1 = Faculty("Zeeshan", "01-5241", "Lahore", "CS")
+course_1 = Course("Software", 20, "Ali Nadeem")
+admin_1.courses_created.append(course_1)
+
+
+l_in = Log_in
+st = Student
+ad = Administration
+fc = Faculty
+cu = Course
+
+
+print("\nWelcome to Course Registration System:")
+log_in_id = str(input("\nEnter your Log in ID: "))
+log_in_pwd = str(input("\nEnter your log in Password: "))
+
+while (log_in_id not in l_in.log_in_details.keys()) or (log_in_pwd != l_in.log_in_details[log_in_id]):
+    print("\nERROR: Incorrect username or password. Please try again.")
+    log_in_id = str(input("\nEnter your Log in ID: "))
+    log_in_pwd = str(input("\nEnter your log in Password: "))
+
+if (log_in_id in l_in.log_in_details.keys()) and (log_in_pwd == l_in.log_in_details[log_in_id]):
+    print("\nWelcome! You are logged in!")
+
+
+if log_in_id[0:2] == "00":
+    print("\nPress 1 to create a course\nPress 2 to get personal details\nPress 3 to get list of courses created")
+    selection = int(input("\nEnter correct option number to continue: "))
+
+    if selection == 1:
+        name = str(input("\nEnter name for the course: "))
+        seats = str(input("\n Enter number of seats allotted:"))
+        f_assigned = str(input("\nEnter the faculty assigned: "))
+        course = Course(name, seats, f_assigned)
+
+    elif selection == 2:
+        ad.get_Details(admin_1)
+
+    elif selection == 3:
+        admin_1.get_courses_created()
+
+    else:
+        print("ERROR: Invalid Selection")
+
+
+elif log_in_id[0:2] == "01":
+    print("\nPress 1 to get personal info\nPress 2 to get students registered")
+    selection = int(input("\nEnter correct option number to continue: "))
+
+    if selection == 1:
+        faculty_1.get_Details()
+
+    elif selection == 2:
+        faculty_1.get_students_registered()
+
+    else:
+        print("ERROR: Invalid Selection")
+
+elif log_in_id[0:2] == "21":
+    print("\nPress 1 to get personal info\nPress 2 to register courses")
+    selection = int(input("\nEnter correct option number to continue: "))
+
+
+    if selection == 1:
+
+        if log_in_id == "21-10301":
+            student_1.get_Details()
+        elif log_in_id == "21-10318":
+            student_2.get_Details()
+        else:
+            student_3.get_Details()
+
+    elif selection == 2:
+        print("\nChoose from the following: ")
+        print(course_1.get_course_info())
+        selection = input("Enter the course index")
+        course_1.seats_alloted -= 1
+        course_1.students_registered += 1
+
+    else:
+        print("Invalid Selection")
